@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>canvas+FabricJS</title>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fabric.js/1.4.0/fabric.min.js"></script>
+    <style type="text/css">
+        canvas {
+            border: 1px solid #ddd;
+        }
+    </style>
+    <script>
+        var canvas;
+        var grid = 50;
+        var info;
+        var objects = [];
+
+        var addRect = function (width, height) {
+            var rect = new fabric.Rect({
+                left: 0,
+                top: 0,
+                width: width * grid,
+                height: height * grid,
+                fill: '#ccc',
+                hasControls: false,
+                name: width + 'x' + height,
+                hodnota: width * height
+            });
+            canvas.add(rect);
+            objects.push(rect);
+        };
+
+        var changeRect = function (el) {
+            canvas.getActiveObject()['hodnota'] = el.value;
+        };
+
+        window.onload = function () {
+            info = document.getElementById('info');
+
+            canvas = new fabric.Canvas('c', {
+                selection: false
+            });
+
+
+            // create grid
+
+            for (var i = 1; i < (600 / grid) ; i++) {
+                canvas.add(new fabric.Line([i * grid, 0, i * grid, 400], {
+                    stroke: '#eee',
+                    selectable: false,
+                    originX: 'center',
+                    originY: 'center'
+                }));
+                canvas.add(new fabric.Line([0, i * grid, 600, i * grid], {
+                    stroke: '#eee',
+                    strokeWidth: 1,
+                    selectable: false,
+                    originX: 'center',
+                    originY: 'center'
+                }));
+            }
+
+            canvas.on('object:moving', function (options) {
+                options.target.set({
+                    left: Math.round(options.target.left / grid) * grid,
+                    top: Math.round(options.target.top / grid) * grid
+                });
+            });
+
+            canvas.on('object:selected', function (options) {
+                var hodnota = '<input type="text" id="hodnota" value="' + options.target.get('hodnota') + '" onkeyup="changeRect(this);">';
+                info.innerHTML = 'Name:' + options.target.get('name') + '<br>Hodnota:' + hodnota;
+            });
+        }
+    </script>
+</head>
+<body>
+    <canvas id="c" width="600" height="400"></canvas>
+    <ul>
+        <li><div style="width: 50px; height: 50px; background-color: #ccc; cursor: pointer;" onclick="addRect(1, 1);"></div></li>
+        <li><div style="width: 50px; height: 100px; background-color: #ccc; cursor: pointer;" onclick="addRect(1, 2);"></div></li>
+        <li><div style="width: 100px; height: 50px; background-color: #ccc; cursor: pointer;" onclick="addRect(2, 1);"></div></li>
+        <li><div style="width: 100px; height: 100px; background-color: #ccc; cursor: pointer;" onclick="addRect(2, 2);"></div></li>
+    </ul>
+    <div id="info"></div>
+</body>
+</html>
