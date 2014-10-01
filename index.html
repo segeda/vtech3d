@@ -38,6 +38,48 @@
             info.innerHTML = '';
         };
 
+        var resize = function () {
+            canvas.setWidth(600);
+            canvas.setHeight(400);
+
+            _createGrid();
+        };
+
+        var _createGrid = function () {
+            canvas.forEachObject(function(o) {
+                if (o.get('name') === 'grid') {
+                    canvas.remove(o);
+                }
+            });
+
+            for (var i = 1; i < (canvas.getWidth() / grid); i++) {
+                canvas.add(new fabric.Line([i * grid, 0, i * grid, canvas.getHeight()], {
+                    stroke: '#eee',
+                    selectable: false,
+                    originX: 'center',
+                    originY: 'center',
+                    name: 'grid'
+                }));
+                canvas.add(new fabric.Line([0, i * grid, canvas.getWidth(), i * grid], {
+                    stroke: '#eee',
+                    selectable: false,
+                    originX: 'center',
+                    originY: 'center',
+                    name: 'grid'
+                }));
+            }
+
+            canvas.forEachObject(function(o) {
+                if (o.get('name') === 'grid') {
+                    canvas.sendToBack(o);
+                } else {
+                    canvas.bringToFront(o);
+                }
+            });
+
+            canvas.renderAll();
+        };
+
         window.onload = function () {
             info = document.getElementById('info');
 
@@ -45,24 +87,7 @@
                 selection: false
             });
 
-
-            // create grid
-
-            for (var i = 1; i < (600 / grid) ; i++) {
-                canvas.add(new fabric.Line([i * grid, 0, i * grid, 400], {
-                    stroke: '#eee',
-                    selectable: false,
-                    originX: 'center',
-                    originY: 'center'
-                }));
-                canvas.add(new fabric.Line([0, i * grid, 600, i * grid], {
-                    stroke: '#eee',
-                    strokeWidth: 1,
-                    selectable: false,
-                    originX: 'center',
-                    originY: 'center'
-                }));
-            }
+            _createGrid();
 
             canvas.on('object:moving', function (options) {
                 options.target.set({
@@ -72,6 +97,7 @@
             });
 
             canvas.on('object:selected', function (options) {
+                canvas.bringToFront(options.target);
                 var hodnota = '<input type="text" id="hodnota" value="' + options.target.get('hodnota') + '" onkeyup="changeRect(this);">';
                 info.innerHTML = 'Name:' + options.target.get('name') + '<br>Hodnota:' + hodnota + '<br><button onclick="deleteRect();">DELETE</button>';
             });
@@ -92,7 +118,8 @@
         </ul>
     </div>
     <div style="float: left; position: relative; padding-left: 50px; padding-right: 50px;">
-        <canvas id="c" width="600" height="400"></canvas>
+        <canvas id="c" width="400" height="300"></canvas>
+        <button onclick="resize();">RESIZE</button>
     </div>
     <div style="float: left; position: relative">
         <div id="info"></div>
