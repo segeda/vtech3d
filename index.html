@@ -13,7 +13,6 @@
         var canvas;
         var grid = 50;
         var info;
-        var objects = [];
 
         var addRect = function (width, height) {
             var rect = new fabric.Rect({
@@ -27,12 +26,16 @@
                 hodnota: width * height
             });
             canvas.add(rect);
-            objects.push(rect);
             info.innerHTML = '';
         };
 
         var changeRect = function (el) {
             canvas.getActiveObject()['hodnota'] = el.value;
+        };
+
+        var deleteRect = function (el) {
+            canvas.remove(canvas.getActiveObject());
+            info.innerHTML = '';
         };
 
         window.onload = function () {
@@ -70,7 +73,7 @@
 
             canvas.on('object:selected', function (options) {
                 var hodnota = '<input type="text" id="hodnota" value="' + options.target.get('hodnota') + '" onkeyup="changeRect(this);">';
-                info.innerHTML = 'Name:' + options.target.get('name') + '<br>Hodnota:' + hodnota;
+                info.innerHTML = 'Name:' + options.target.get('name') + '<br>Hodnota:' + hodnota + '<br><button onclick="deleteRect();">DELETE</button>';
             });
 
             canvas.on('selection:cleared', function (options) {
