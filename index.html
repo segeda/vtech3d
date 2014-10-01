@@ -28,6 +28,7 @@
             });
             canvas.add(rect);
             objects.push(rect);
+            info.innerHTML = '';
         };
 
         var changeRect = function (el) {
@@ -71,17 +72,27 @@
                 var hodnota = '<input type="text" id="hodnota" value="' + options.target.get('hodnota') + '" onkeyup="changeRect(this);">';
                 info.innerHTML = 'Name:' + options.target.get('name') + '<br>Hodnota:' + hodnota;
             });
+
+            canvas.on('selection:cleared', function (options) {
+                info.innerHTML = '';
+            });
         }
     </script>
 </head>
 <body>
-    <canvas id="c" width="600" height="400"></canvas>
-    <ul>
-        <li><div style="width: 50px; height: 50px; background-color: #ccc; cursor: pointer;" onclick="addRect(1, 1);"></div></li>
-        <li><div style="width: 50px; height: 100px; background-color: #ccc; cursor: pointer;" onclick="addRect(1, 2);"></div></li>
-        <li><div style="width: 100px; height: 50px; background-color: #ccc; cursor: pointer;" onclick="addRect(2, 1);"></div></li>
-        <li><div style="width: 100px; height: 100px; background-color: #ccc; cursor: pointer;" onclick="addRect(2, 2);"></div></li>
-    </ul>
-    <div id="info"></div>
+    <div style="float: left; position: relative">
+        <ul>
+            <li><div style="width: 50px; height: 50px; background-color: #ccc; cursor: pointer;" onclick="addRect(1, 1);"></div></li>
+            <li><div style="width: 50px; height: 100px; background-color: #ccc; cursor: pointer;" onclick="addRect(1, 2);"></div></li>
+            <li><div style="width: 100px; height: 50px; background-color: #ccc; cursor: pointer;" onclick="addRect(2, 1);"></div></li>
+            <li><div style="width: 100px; height: 100px; background-color: #ccc; cursor: pointer;" onclick="addRect(2, 2);"></div></li>
+        </ul>
+    </div>
+    <div style="float: left; position: relative; padding-left: 50px; padding-right: 50px;">
+        <canvas id="c" width="600" height="400"></canvas>
+    </div>
+    <div style="float: left; position: relative">
+        <div id="info"></div>
+    </div>
 </body>
 </html>
