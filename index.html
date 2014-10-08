@@ -46,14 +46,14 @@
             _createGrid();
         };
 
-        var debug = function() {
-            var debug = '\'name\';x;y;hodnota;\n';
+        var export = function() {
+            var export = '\'name\';x;y;hodnota;\n';
             canvas.forEachObject(function(o) {
                 if (o.get('name') !== 'grid') {
-                    debug += '\'' + o.get('name') + '\';' + o.get('left') + ';' + o.get('top') + ';' + o.get('hodnota') + ';\n';
+                    export += '\'' + o.get('name') + '\';' + o.get('left') + ';' + o.get('top') + ';' + o.get('hodnota') + ';\n';
                 }
             });
-            document.getElementById('debug').value = debug;
+            document.getElementById('export').value = export;
         };
 
         var _createGrid = function () {
@@ -136,7 +136,7 @@
         <div id="info"></div>
     </div>
     <hr style="clear: both;">
-    <button onclick="debug()">DEBUG</button>
-    <textarea id="debug" cols="100" rows="5"></textarea>
+    <button onclick="export()">EXPORT</button>
+    <textarea id="export" cols="100" rows="5"></textarea>
 </body>
 </html>
