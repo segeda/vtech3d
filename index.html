@@ -14,7 +14,7 @@
         var grid = 50;
         var info;
 
-        var addRect = function (width, height) {
+        var addRect = function (name, width, height) {
             var rect = new fabric.Rect({
                 left: 0,
                 top: 0,
@@ -22,7 +22,7 @@
                 height: height * grid,
                 fill: '#ccc',
                 hasControls: false,
-                name: width + 'x' + height,
+                name: name,
                 hodnota: width * height
             });
             canvas.add(rect);
@@ -46,9 +46,9 @@
             _createGrid();
         };
 
-        var exportData = function() {
-            var exportedData = '\'name\';x;y;hodnota;\n';
-            canvas.forEachObject(function(o) {
+        var exportData = function () {
+            var exportedData = '\'canvas\';' + canvas.getWidth() + ';' + canvas.getHeight() + ';\n';
+            canvas.forEachObject(function (o) {
                 if (o.get('name') !== 'grid') {
                     exportedData += '\'' + o.get('name') + '\';' + o.get('left') + ';' + o.get('top') + ';' + o.get('hodnota') + ';\n';
                 }
@@ -57,13 +57,13 @@
         };
 
         var _createGrid = function () {
-            canvas.forEachObject(function(o) {
+            canvas.forEachObject(function (o) {
                 if (o.get('name') === 'grid') {
                     canvas.remove(o);
                 }
             });
 
-            for (var i = 1; i < (canvas.getWidth() / grid); i++) {
+            for (var i = 1; i < (canvas.getWidth() / grid) ; i++) {
                 canvas.add(new fabric.Line([i * grid, 0, i * grid, canvas.getHeight()], {
                     stroke: '#eee',
                     selectable: false,
@@ -80,7 +80,7 @@
                 }));
             }
 
-            canvas.forEachObject(function(o) {
+            canvas.forEachObject(function (o) {
                 if (o.get('name') === 'grid') {
                     canvas.sendToBack(o);
                 } else {
@@ -122,10 +122,10 @@
 <body>
     <div style="float: left; position: relative">
         <ul>
-            <li><div style="width: 50px; height: 50px; background-color: #ccc; cursor: pointer;" onclick="addRect(1, 1);"></div></li>
-            <li><div style="width: 50px; height: 100px; background-color: #ccc; cursor: pointer;" onclick="addRect(1, 2);"></div></li>
-            <li><div style="width: 100px; height: 50px; background-color: #ccc; cursor: pointer;" onclick="addRect(2, 1);"></div></li>
-            <li><div style="width: 100px; height: 100px; background-color: #ccc; cursor: pointer;" onclick="addRect(2, 2);"></div></li>
+            <li><div style="width: 50px; height: 50px; background-color: #ccc; cursor: pointer;" onclick="addRect('1x1', 1, 1);"></div></li>
+            <li><div style="width: 50px; height: 100px; background-color: #ccc; cursor: pointer;" onclick="addRect('1x2', 1, 2);"></div></li>
+            <li><div style="width: 100px; height: 50px; background-color: #ccc; cursor: pointer;" onclick="addRect('2x1', 2, 1);"></div></li>
+            <li><div style="width: 100px; height: 100px; background-color: #ccc; cursor: pointer;" onclick="addRect('2x2', 2, 2);"></div></li>
         </ul>
     </div>
     <div style="float: left; position: relative; padding-left: 50px; padding-right: 50px;">
