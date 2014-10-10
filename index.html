@@ -23,10 +23,12 @@
                 fill: '#ccc',
                 hasControls: false,
                 name: name,
-                hodnota: width * height
+                hodnota: 'hodnota'
             });
             canvas.add(rect);
-            info.innerHTML = '';
+            while (info.firstChild) {
+                info.removeChild(info.firstChild);
+            }
         };
 
         var changeRect = function (el) {
@@ -34,9 +36,10 @@
         };
 
         var deleteRect = function (el) {
-            var selected = canvas.getActiveObject();
-            canvas.remove(selected);
-            info.innerHTML = '';
+            canvas.remove(canvas.getActiveObject());
+            while (info.firstChild) {
+                info.removeChild(info.firstChild);
+            }
         };
 
         var resize = function () {
@@ -109,12 +112,33 @@
 
             canvas.on('object:selected', function (options) {
                 canvas.bringToFront(options.target);
-                var hodnota = '<input type="text" id="hodnota" value="' + options.target.get('hodnota') + '" onkeyup="changeRect(this);">';
-                info.innerHTML = 'Name:' + options.target.get('name') + '<br>Hodnota:' + hodnota + '<br><button onclick="deleteRect();">DELETE</button>';
+
+                while (info.firstChild) {
+                    info.removeChild(info.firstChild);
+                }
+
+                var hodnotaInput = document.createElement('input');
+                hodnotaInput.setAttribute('type', 'text');
+                hodnotaInput.setAttribute('id', 'hodnota2');
+                hodnotaInput.value = options.target.get('hodnota');
+                hodnotaInput.addEventListener('input', function () { changeRect(this) });
+
+                var deleteButton = document.createElement('button');
+                deleteButton.addEventListener('click', deleteRect);
+                deleteButton.appendChild(document.createTextNode('DELETE'));
+
+                info.appendChild(document.createTextNode('Name:' + options.target.get('name')));
+                info.appendChild(document.createElement('br'));
+                info.appendChild(document.createTextNode('Hodnota:'));
+                info.appendChild(hodnotaInput);
+                info.appendChild(document.createElement('br'));
+                info.appendChild(deleteButton);
             });
 
             canvas.on('selection:cleared', function (options) {
-                info.innerHTML = '';
+                while (info.firstChild) {
+                    info.removeChild(info.firstChild);
+                }
             });
         }
     </script>
